@@ -4,6 +4,9 @@
 
 void main()
 {
+	setlocale(LC_ALL, "");
+	CONST INT SIZE_NAME = 32;
+	CHAR sz_username[SIZE_NAME] = "Server";
 	int nChoice;
 	int port = 22000;
 	string ipAddress;
@@ -34,6 +37,7 @@ void main()
 	{
 		cout << "Enter IP address: ";
 		cin >> ipAddress;
+		//cout << "Enter username: "; cin >> sz_username;
 		ClientSocket client;
 		client.ConnectToServer(ipAddress.c_str(), port);
 		while (true)
