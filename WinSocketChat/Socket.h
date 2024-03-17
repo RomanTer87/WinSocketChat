@@ -1,5 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #pragma once
 #include<iostream>;
+#include<string>
+#include<cstdio>
 #include<WS2tcpip.h>
 #include<WinSock2.h>
 
@@ -16,11 +19,13 @@ protected:
 	SOCKET _socket;
 	SOCKET acceptSocket;
 	sockaddr_in addr;
+	string username;
 public:
 	Socket();
+	Socket(string username);
 	~Socket();
 	bool SendData(char* buffer);
 	bool RecieveData(char* buffer, int size);
 	void CloseConnection();
-	void SendDataMessage();
+	CONST CHAR* SendDataMessage();
 };

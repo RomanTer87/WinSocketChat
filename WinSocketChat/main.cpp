@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<string>
 #include"ServerSocket.h"
 #include"ClientSocket.h"
@@ -5,8 +6,9 @@
 void main()
 {
 	setlocale(LC_ALL, "");
-	CONST INT SIZE_NAME = 32;
-	CHAR sz_username[SIZE_NAME] = "Server";
+	//CONST INT SIZE_NAME = 32;
+	//CHAR sz_username[SIZE_NAME] = "Server";
+
 	int nChoice;
 	int port = 22000;
 	string ipAddress;
@@ -25,28 +27,36 @@ void main()
 		server.StartHosting(port);
 		while (true)
 		{
-			cout << "Waiting..." << endl;
+			//cout << "Waiting..." << endl;
 			server.RecieveData(recieveMessage, MAXSTRLEN);
-			cout << "Recieved: " << recieveMessage << endl;
+			if (strstr(sendMessage, "bye"))
+			{
+				server.AcceptClient();
+			}
+			cout/* << "Recieved: "*/ << recieveMessage << endl;
 			server.SendDataMessage();
-			if (strcmp(recieveMessage, "end") == 0 || strcmp(sendMessage, "end") == 0)break;
+			if (strstr(recieveMessage, "bye"))break;
 		}
 	}
 		break;
 	case 2:
 	{
-		cout << "Enter IP address: ";
-		cin >> ipAddress;
-		//cout << "Enter username: "; cin >> sz_username;
-		ClientSocket client;
+		string username;
+		ipAddress = "127.0.0.1";
+		//cout << "Enter IP address: "; cin >> ipAddress;
+		cout << "Enter username: "; cin >> username;
+		ClientSocket client = username;
 		client.ConnectToServer(ipAddress.c_str(), port);
 		while (true)
 		{
-			client.SendDataMessage();
-			cout << "Waiting" << endl;
+			ZeroMemory(sendMessage, sizeof(sendMessage));
+			ZeroMemory(recieveMessage, sizeof(recieveMessage));
+			strcpy(sendMessage, client.SendDataMessage());
+			if (strstr(sendMessage, "bye"))break;
+			//cout << "Waiting" << endl;
 			client.RecieveData(recieveMessage, MAXSTRLEN);
-			cout << "Recieved: " << recieveMessage << endl;
-			if (strcmp(recieveMessage, "end") == 0 || strcmp(sendMessage, "end") == 0)break;
+			cout/* << "Recieved: "*/ << recieveMessage << endl;
+			if (strstr(recieveMessage, "bye"))break;
 		}
 		client.CloseConnection();
 	}
